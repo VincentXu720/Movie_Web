@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MTIME</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-dark">
+      <div class="container-fluid">
+        <a class="navbar-brand"><img class="movie-img" src="assets/movie2.png"></a>
+        <button class="navbar-toggler bg-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link text-light Home" href="#">首頁</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link text-light Now" href="#">現正播放</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link text-light Popular" href="#">最受歡迎</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link text-light Rate" href="#">最受好評</a>
+            </li>
+          </ul>
+          <form class="d-flex bg-white rounded-pill">
+            <input class="form-control me-2 rounded-pill border-0" placeholder="Search" aria-label="Search">
+            <button class="search-button">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                  <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
+              </svg>
+            </button>
+          </form>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Swiper -->
+    <div class="swiper mySwiper">
+      <div class="swiper-wrapper bg-transparent w-100 d-flex">
+        
+      </div>
+    </div>
+    <div class="mw-100% row justify-content-center movie_Box">
+      <div class=" row container pt-3 justify-content-center movie_container"></div>
+          <!-- Home Page Movie -->
+      <div class="d-flex justify-content-center w-100 ChangePage">
+        <button type="button" class="btn up">上一頁</button>
+        <p class="d-flex flex-wrap justify-content-center align-content-center page"></p>
+        <button type="button" class="btn down">下一頁</button>
+      </div>
+    </div>
+
+    <!-- JQuery -->
+    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+    <!-- bootstrap 5 -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- swiper -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    
+    <script src="js/movie.js"></script>
+    
+    
+</body>
+</html>
