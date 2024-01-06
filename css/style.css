@@ -36,31 +36,29 @@ li > .dropdown-item:hover {
   background-color: var(--bs-secondary);
 }
 
-form > .search-button {
-  padding: 0 0 5px 0;
-  background-color: transparent;
-  border: none;
+.search-box {
+  width: 220px;
+  background-color: white;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  border: 2px solid black;
+  border-radius: 20px;
 }
-form > .search-button > svg {
+.search-box > input:focus {
+  outline: none;
+}
+.search-box > .search-button {
+  padding: 0 0 5px 0;
+  width: 50px;
+  border: none;
+  background-color: transparent;
+}
+.search-box > .search-button > svg {
   display: inline-block;
   color: black;
   width: 20px;
   height: 20px;
-}
-
-form {
-  width: 190px;
-}
-
-form > .form-control {
-  width: 150px;
-}
-
-form > .form-control:focus {
-  border: none;
-  -webkit-box-shadow: none;
-          box-shadow: none;
-  outline: none;
 }
 
 .Home:hover {
@@ -94,7 +92,7 @@ form > .form-control:focus {
 }
 .movie_Box > .movie_container > .movie_content {
   padding: 10px 10px;
-  width: 230px;
+  width: 260px;
   height: auto;
 }
 .movie_Box > .movie_container > .movie_content > .movie_poster {
@@ -172,9 +170,6 @@ form > .form-control:focus {
   background-position: 80% 20%;
 }
 .mySwiper > .swiper-wrapper > .swiper-slide > .black {
-  display: grid;
-  grid-template-rows: repeat(3, -webkit-min-content);
-  grid-template-rows: repeat(3, min-content);
   width: 100%;
   height: 100%;
   position: absolute;
@@ -188,32 +183,25 @@ form > .form-control:focus {
     display: none;
   }
 }
-.mySwiper > .swiper-wrapper > .swiper-slide > .black > div {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  grid-template-columns: repeat(2, -webkit-max-content);
-  grid-template-columns: repeat(2, max-content);
-  grid-template-rows: repeat(2, -webkit-min-content);
-  grid-template-rows: repeat(2, min-content);
-}
-.mySwiper > .swiper-wrapper > .swiper-slide > .black > div > h2 {
+.mySwiper > .swiper-wrapper > .swiper-slide > .black > h2 {
   color: var(--text-purple);
-  height: 35px;
-  margin-right: 30px;
-}
-.mySwiper > .swiper-wrapper > .swiper-slide > .black > div > span {
-  font-size: 16px;
-  color: var(--text-purple);
-  padding-top: 10px;
+  font-size: 26px;
+  margin: 0;
+  line-height: 2rem;
 }
 .mySwiper > .swiper-wrapper > .swiper-slide > .black > h4 {
   font-size: 1rem;
   color: var(--secondary-text-purple);
-  grid-row: 2;
+  margin: 0;
+  line-height: 1.5rem;
+}
+.mySwiper > .swiper-wrapper > .swiper-slide > .black > span {
+  font-size: 16px;
+  color: var(--text-purple);
+  padding-top: 10px;
+  line-height: 2rem;
 }
 .mySwiper > .swiper-wrapper > .swiper-slide > .black > p {
-  grid-row: 3;
   width: 500px;
   color: var(--text-purple);
 }

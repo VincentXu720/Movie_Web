@@ -5,7 +5,8 @@ $(document).ready(function () {
 
   let Home_count = 1;
   HomePage(Home_count);
-  $(".Home").click(() => {
+  $(".Home").click((e) => {
+    e.stopPropagation();
     const SwiperBox = ` 
         <div class="swiper mySwiper">
           <div class="swiper-wrapper bg-transparent w-100 d-flex">
@@ -16,32 +17,37 @@ $(document).ready(function () {
     HomePage();
   });
 
-  $(".Now").click(() => {
-    const NowPlay_url = "/movie/now_playing?language=zh-chtS&";
+  $(".Now").click((e) => {
+    e.stopPropagation();
+    const NowPlay_url = "/movie/now_playing?language=en-USS&";
     OtherPage(NowPlay_url);
   });
-  $(".Popular").click(() => {
-    const Popular_url = "/movie/popular?language=zh-cht&";
+  $(".Popular").click((e) => {
+    e.stopPropagation();
+    const Popular_url = "/movie/popular?language=en-US&";
     OtherPage(Popular_url);
   });
-  $(".Rate").click(() => {
-    const TopRated_url = "/movie/top_rated?language=zh-cht&";
+  $(".Rate").click((e) => {
+    e.stopPropagation();
+    const TopRated_url = "/movie/top_rated?language=en-US&";
     OtherPage(TopRated_url);
   });
 
   
   function OtherPage(url) {
-    let count = 1
+    let count = 1;
     $(".swiper").remove();
       if (count === "1") {
-        $(".up").click(() => {
+        $(".up").click((e) => {
+          e.stopPropagation();
           // 添加捲動軸至頂動畫
           $("html , body").animate({
             scrollTop: 0
           },0);
         });
       } else {
-        $(".up").click(() => {
+        $(".up").click((e) => {
+          e.stopPropagation();
           // 添加捲動軸至頂動畫
           $("html , body").animate({
             scrollTop: 0
@@ -50,7 +56,8 @@ $(document).ready(function () {
           FetchMovie(url,count)
         });
       }
-      $(".down").off('click').click(() => {
+      $(".down").off('click').click((e) => {
+        e.stopPropagation();
         // 添加捲動軸至頂動畫
         $("html , body").animate({
           scrollTop: 0
@@ -67,8 +74,9 @@ $(document).ready(function () {
     .then((data) => {
       let MovieContent = "";
       $.each(data.results, (index, content) => {
-        MovieContent += `
-            <div class="d-flex flex-column movie_content">
+        if(content.poster_path){
+          MovieContent += `
+            <div class="d-flex flex-column mb-3 movie_content">
                 <div class="movie_poster">
                     <img class="" src="${Poster_url + content.poster_path}">
                 </div>
@@ -77,17 +85,16 @@ $(document).ready(function () {
                 </div>
             </div>
             `;
-        $(".movie_container").html(MovieContent);
-        $(".page").html(count)
+          $(".movie_container").html(MovieContent);
+          $(".page").html(count)
+        }
       });
     });
   }
 
-  function HomePage(Home_count) {
-    const Home_url =
-      "/discover/movie?include_adult=false&include_video=false&language=zh-cht.desc&page=" +
-      Home_count +
-      "&";
+  async function HomePage(Home_count) {
+    const Home_url ="/discover/movie?include_adult=false&include_video=false&language=en-US.desc&page=" + Home_count + "&";
+    SwiperBox();
     fetch(Movie_url + Home_url + key)
       .then((res) => res.json())
       .then((Data) => {
@@ -97,35 +104,37 @@ $(document).ready(function () {
           HomePage(Home_count);
           return;
         }
-        SwiperControl();
-        SwiperBox();
         let MovieContent = "";
         $.each(Data.results, (index, movie) => {
-          MovieContent += `
-        <div class="d-flex flex-column movie_content">
-          <div class="movie_poster">
-            <img class="" src="${Poster_url + movie.poster_path}">
-          </div>
-          <div class="d-flex justify-content-center movie_info">
-            <h4 class="fs-6 title">${movie.title}</h4>
-          </div>
-        </div>      
-        `;
+          if(movie.poster_path){
+            MovieContent += `
+              <div class="d-flex flex-column mb-3 movie_content">
+                <div class="movie_poster">
+                  <img class="" src="${Poster_url + movie.poster_path}">
+                </div>
+                <div class="d-flex justify-content-center movie_info">
+                  <h4 class="fs-6 title">${movie.title}</h4>
+                </div>
+              </div>      
+            `;
+            $(".movie_container").html(MovieContent);
+          }
         });
-        $(".movie_container").html(MovieContent);
         HomePageControl();
       });
     function HomePageControl() {
       $(".page").html(Home_count);
       if (Home_count === "1") {
-        $(".up").click(() => {
+        $(".up").click((e) => {
+          e.stopPropagation()
           // 添加捲動軸至頂動畫
           $("html , body").animate({
               scrollTop: 0
           },0);
         });
       } else {
-        $(".up").click(() => {
+        $(".up").click((e) => {
+          e.stopPropagation()
           // 添加捲動軸至頂動畫
           $("html , body").animate({
               scrollTop: 0
@@ -134,7 +143,8 @@ $(document).ready(function () {
           HomePage(Home_count);
         });
       }
-      $(".down").click(() => {
+      $(".down").click((e) => {
+        e.stopPropagation()
         // 添加捲動軸至頂動畫
         $("html , body").animate({
             scrollTop: 0,
@@ -145,24 +155,11 @@ $(document).ready(function () {
     }
   }
 
-  // Swiper JS
-  function SwiperControl() {
-    const mySwiper = new Swiper(".mySwiper", {
-      dynamicBullets: true,
-      loop: true,
-      autoplay: {
-        delay: 1000,
-      },
-      pagination: {
-        el: ".swiper-pagination",
-      },
-    });
-  }
-
-  function SwiperBox() {
+  // 製造Swiper中的內容
+  async function SwiperBox() {
     let SwiperContainer = "";
-    const TopPopular_url = "/movie/popular?language=zh-cht&";
-    fetch(Movie_url + TopPopular_url + key)
+    const TopPopular_url = "/movie/popular?language=en-US&";
+    await fetch(Movie_url + TopPopular_url + key)
       .then((res) => res.json())
       .then((data) => {
         const TopFiveMovie = data.results;
@@ -172,19 +169,29 @@ $(document).ready(function () {
                   Poster_url + TopFiveMovie[i].backdrop_path
                 })>
                     <div class="black">
-                        <div>
-                            <h2>${TopFiveMovie[i].title}</h2>
-                            <span>${TopFiveMovie[i].release_date}</span>
-                        </div>
+                        <h2>${TopFiveMovie[i].title}</h2>
                         <h4>${TopFiveMovie[i].original_title}</h4>
+                        <span>${TopFiveMovie[i].release_date}</span>
                         <p>${TopFiveMovie[i].overview}</p>
                     </div>
                 </div> 
-                
             `;
         }
         $(".swiper-wrapper").html(SwiperContainer);
       });
+
+    // Swiper JS
+    // 要放在抓取電影內容的API後面才能進行初始化
+    const mySwiper = await new Swiper(".mySwiper", {
+      dynamicBullets: true,
+      loop: true,
+      autoplay: {
+        delay: 1000,
+      },
+      pagination: {
+        el: ".swiper-pagination",
+      },
+    });
   }
 });
 
