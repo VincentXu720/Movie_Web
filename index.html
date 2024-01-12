@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
     <link rel="stylesheet" href="css/style.css">
 </head>
-<body>
+<body class="position-relative">
     <nav class="navbar navbar-expand-lg navbar-light bg-dark">
       <div class="container-fluid">
         <a class="navbar-brand"><img class="movie-img" src="assets/movie2.png"></a>
@@ -37,7 +37,6 @@
                 <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
               </svg>
             </button>
-            
           </div>
         </div>
       </div>
@@ -46,20 +45,22 @@
     <!-- Swiper -->
     <div class="swiper mySwiper">
       <div class="swiper-wrapper bg-transparent w-100 d-flex">
-        
+        <!-- Swiper 內容 -->
       </div>
     </div>
-    <div class="mw-100% row justify-content-center movie_Box">
+    <div class="position-relative mw-100% row justify-content-center movie_Box">
       <div class=" row container pt-3 justify-content-center movie_container">
         <!-- Home Page Movie -->
       </div>
-      <div class="d-flex justify-content-center w-100 ChangePage">
-        <button type="button" class="btn up">上一頁</button>
-        <p class="d-flex flex-wrap justify-content-center align-content-center page"></p>
-        <button type="button" class="btn down">下一頁</button>
-      </div>
+    </div>
+    <div class="d-flex justify-content-center w-100 ChangePage">
+      <button type="button" class="btn up">上一頁</button>
+      <p class="d-flex flex-wrap justify-content-center align-content-center page"></p>
+      <button type="button" class="btn down">下一頁</button>
     </div>
 
+   
+    
     <!-- JQuery -->
     <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
     <!-- bootstrap 5 -->
@@ -68,7 +69,6 @@
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <script src="js/search.js"></script>
     <script src="js/movie.js"></script>
-    <script src="js/MovieInfo.js"></script>
     
 </body>
 </html>
