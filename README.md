@@ -12,7 +12,7 @@
 
 ## JQuery/JS/Swiper
 -Fetch去讀取TMDB的API資料<br>
--並用 JQuery 進行網頁資料的呈現
+-並用 JQuery 進行網頁資料的呈現<br>
 -Swiper 主頁的電影輪播
 
 
