@@ -15,6 +15,10 @@
 -並用 JQuery 進行網頁資料的呈現<br>
 -Swiper 主頁的電影輪播
 
+## 功能
+-透過點擊導覽列可以觀看正播放/受歡迎/受好評的電影
+-搜尋電影
+
 ## Demo
 https://vincentxu720.github.io/Movie_Web/
 
