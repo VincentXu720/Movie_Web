@@ -157,7 +157,7 @@ li > .dropdown-item:hover {
 }
 @media (min-width: 768px) {
   .mySwiper {
-    height: 500px;
+    height: 450px;
   }
 }
 .mySwiper > .swiper-wrapper > .swiper-slide {
