@@ -89,8 +89,8 @@ $(document).ready(function () {
       });
   }
 
-  function FetchMovie(url,count){
-    fetch(Movie_url + url + key + "&page=" + count)
+  async function FetchMovie(url,count){
+    await fetch(Movie_url + url + key + "&page=" + count)
     .then((res) => res.json())
     .then((data) => {
       let MovieContent = "";
@@ -133,14 +133,14 @@ $(document).ready(function () {
     $(".movie_Box").append(changeButton)
     $(".page").html(Home_count)
   }
-  function HomePage(Home_count) {
+  async function HomePage(Home_count) {
     // 當button重新放入時，由於Home_count是在外部被宣告的，所以導致這裡進來的Home_count會是undefined
     if(Home_count === undefined){
       Home_count = 1;
     }
     const Home_url ="/discover/movie?include_adult=false&include_video=false&language=en-US.desc&page=" + Home_count + "&";
     SwiperBox();
-    fetch(Movie_url + Home_url + key)
+    await fetch(Movie_url + Home_url + key)
       .then((res) => res.json())
       .then((Data) => {
         // 判定是否還能抓到資料，如果不行就是undefined
