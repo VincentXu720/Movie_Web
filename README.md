@@ -23,6 +23,6 @@
 https://vincentxu720.github.io/Movie_Web/
 
 ## Github
-https://github.com/VincentXu720/Movie_Web
+https://github.com/VincentXu720
 
 
