@@ -180,7 +180,7 @@ li > .dropdown-item:hover {
   background: -webkit-gradient(linear, left top, right top, from(rgb(41, 41, 41)), to(transparent));
   background: linear-gradient(90deg, rgb(41, 41, 41), transparent);
   border-radius: 15px;
-  padding: 120px 0 0 50px;
+  padding: 90px 0 0 50px;
 }
 @media (max-width: 992px) {
   .mySwiper > .swiper-wrapper > .swiper-slide > .black {

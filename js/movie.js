@@ -100,8 +100,8 @@ $(document).ready(function () {
       success:function(res){
         return res
       },
-      error:function(err){
-        console.log(err)
+      error:function(error){
+        console.log(error)
       }
     })
     // 把資料按照Json中的順序放到TranslateMovie()裡
@@ -121,8 +121,8 @@ $(document).ready(function () {
         success:function(res){
           return res
         },
-        error:function(err){
-          console.log(err)
+        error:function(error){
+          console.log(error)
         }
       })
       // 配對兩筆資料並把資料放到MovieContent變數裡
@@ -293,14 +293,15 @@ $(document).ready(function () {
     }
   }
   async function initSwiper(){
+    console.log('yes')
     // Swiper JS
     // 要放在抓取電影內容的API後面才能進行初始化
     const mySwiper = new Swiper(".mySwiper", {
       dynamicBullets: true,
       loop:true,
-      autoplay: {
-        delay: 500,
-      },
+      // autoplay: {
+      //   delay: 1000,
+      // },
       pagination: {
         el: ".swiper-pagination",
       },
