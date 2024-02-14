@@ -299,9 +299,9 @@ $(document).ready(function () {
     const mySwiper = new Swiper(".mySwiper", {
       dynamicBullets: true,
       loop:true,
-      // autoplay: {
-      //   delay: 1000,
-      // },
+      autoplay: {
+        delay: 1000,
+      },
       pagination: {
         el: ".swiper-pagination",
       },
