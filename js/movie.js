@@ -5,7 +5,6 @@ $(document).ready(function () {
   
   let Home_count = 1;
   HomePage(Home_count);
-  
   $(".Home").click((e) => {
     e.stopPropagation();
     const SwiperContainer = ` 
@@ -15,78 +14,58 @@ $(document).ready(function () {
         </div>
       `;
     $(".movie_Box").prepend(SwiperContainer); // 將元素插在所選的元素前面
-    if($('.ChangePage').length === 0){
-      const changeButton = `
-        <div class="d-flex justify-content-center w-100 ChangePage">
-          <button type="button" class="btn up">上一頁</button>
-          <p class="d-flex flex-wrap justify-content-center align-content-center page"></p>
-          <button type="button" class="btn down">下一頁</button>
-        </div>
-      `
-      $(".movie_Box").append(changeButton)
-      $(".page").html(Home_count)
+    if($(".ChangePage").length === 0){
+      clickPage(Home_count)
     }
-    HomePage();
+    HomePage(Home_count);
   });
 
   $(".Now").click((e) => {
     e.stopPropagation();
     const NowPlay_url = "/movie/now_playing?language=en-USS&";
+    OtherPage(NowPlay_url,Home_count);
     if($(".ChangePage").length === 0){
       clickPage(Home_count)
     }
-    OtherPage(NowPlay_url);
   });
+
   $(".Popular").click((e) => {
     e.stopPropagation();
     const Popular_url = "/movie/popular?language=en-US&";
+    OtherPage(Popular_url,Home_count);
     if($(".ChangePage").length === 0){
       clickPage(Home_count)
     }
-    OtherPage(Popular_url);
   });
+
   $(".Rate").click((e) => {
     e.stopPropagation();
     const TopRated_url = "/movie/top_rated?language=en-US&";
+    OtherPage(TopRated_url,Home_count);
     if($(".ChangePage").length === 0){
       clickPage(Home_count)
     }
-    OtherPage(TopRated_url);
   });
 
   
-  function OtherPage(url) {
-    let count = 1;
-    FetchMovie(url,count)
+  async function OtherPage(url,count) {
     $(".swiper").remove();
-      if (count === "1") {
-        $(".up").click((e) => {
-          e.stopPropagation();
-          // 添加捲動軸至頂動畫
-          $("html , body").animate({
-            scrollTop: 0
-          },0);
-        });
-      } else {
-        $(".up").click((e) => {
-          e.stopPropagation();
-          // 添加捲動軸至頂動畫
-          $("html , body").animate({
-            scrollTop: 0
-          },0);
-          count -= 1;
-          FetchMovie(url,count)
-        });
+    await FetchMovie(url,count)
+    $(".up").off("click").click(async(e) => {
+      // 添加捲動軸至頂動畫
+      await ScrollAnimation()
+      if(count!=1){
+        count --;
       }
-      $(".down").off('click').click((e) => {
-        e.stopPropagation();
-        // 添加捲動軸至頂動畫
-        $("html , body").animate({
-          scrollTop: 0
-        },0);
-        count += 1;
-        FetchMovie(url,count)
-      });
+      await FetchMovie(url,count)
+    });
+
+    $(".down").off('click').click(async(e) => {
+      // 添加捲動軸至頂動畫
+      await ScrollAnimation()
+      count ++;
+      await FetchMovie(url,count) 
+    });
   }
 
   // 處理導覽列電影 Container 內容
@@ -98,54 +77,97 @@ $(document).ready(function () {
       method:"GET",
       dataType:"JSON",
       success:function(res){
-        return res
+        if(res.results === undefined){
+          count = 1;
+          FetchMovie(url,count);
+          return res;
+        }else{
+          return res;
+        }
       },
-      error:function(error){
-        console.log(error)
+      error:function(err){
+        console.log(err)
       }
     })
-    // 把資料按照Json中的順序放到TranslateMovie()裡
-    // 防止電影的位置改變
-    for( const movie of MovieContainer.results){
+    // 按照JSON的順序編排電影位置
+    for(const movie of MovieContainer.results){
       await TranslateMovie(movie,count)
     }
     $(".movie_container").html(MovieContent);
     $(".page").html(count)
     
+
+    
+    
     // 讀取 Movie Translate 的資料
     async function TranslateMovie(movie,count){
+      const MovieData = {
+        translate:[],
+        movie:[],
+      }
       const MovieTranslate = await $.ajax({ 
         url: Movie_url+`/movie/${movie.id}/translations?`+key,
         method:"GET",
         dataType:"JSON",
         success:function(res){
-          return res
+          return res;
         },
-        error:function(error){
-          console.log(error)
+        error:function(err){
+          console.log(err)
         }
       })
+
       // 配對兩筆資料並把資料放到MovieContent變數裡
-      $.each(MovieTranslate.translations,(index,ID)=>{
+      await MovieTranslate.translations.map((ID)=>{
         if(ID.iso_639_1 === "zh" && ID.iso_3166_1 === "TW"){
-          if(movie.poster_path && ID.data.title){
-            MovieContent += `
-              <div class="d-flex flex-column mb-3 movie_content">
-                <div class="movie_poster">
-                  <img class="" src="${Poster_url + movie.poster_path}">
-                </div>
-                <div class="d-flex justify-content-center movie_info">
-                  <h4 class="fs-6 title">${ID.data.title}</h4>
-                </div>
-              </div>      
-            `;
+          if(!MovieData.translate.includes(ID)){
+            MovieData.translate.push(ID);
+          }
+          if(!MovieData.movie.includes(movie)){
+            MovieData.movie.push(movie);
+          }
+        }else if(ID.iso_639_1 === "en" && ID.iso_3166_1 === "US"){
+          if(!MovieData.movie.includes(movie)){
+            MovieData.movie.push(movie);
           }
         }
       })
+
+      if(MovieData.movie.length != 0 && MovieData.translate.length != 0){
+        $.each(MovieData.movie,(index,movie)=>{
+          $.each(MovieData.translate,(index,ID)=>{
+            if(movie.title && ID.data.title){
+              MovieContent += `
+                <div class="d-flex flex-column mb-3 movie_content">
+                  <div class="movie_poster">
+                    <img class="" src="${Poster_url + movie.poster_path}">
+                  </div>
+                  <div class="d-flex justify-content-center movie_info">
+                    <h4 class="fs-6 title">${ID.data.title}</h4>
+                  </div>
+                </div>      
+              `;
+            }
+          })
+        })
+      }else{
+        $.each(MovieData.movie,(index,movie)=>{
+          MovieContent += `
+            <div class="d-flex flex-column mb-3 movie_content">
+              <div class="movie_poster">
+                <img class="" src="${Poster_url + movie.poster_path}">
+              </div>
+              <div class="d-flex justify-content-center movie_info">
+                <h4 class="fs-6 title">${movie.title}</h4>
+              </div>
+            </div>      
+          `;
+        })
+      }
     }
   }
   
-  function clickPage(){
+  function clickPage(Home_count){
     const changeButton = `
       <div class="d-flex justify-content-center w-100 ChangePage">
         <button type="button" class="btn up">上一頁</button>
@@ -156,9 +178,12 @@ $(document).ready(function () {
     $(".movie_Box").append(changeButton)
     $(".page").html(Home_count)
   }
+  
   async function HomePage(Home_count) {
     let MovieContent = "";
-    SwiperBox();
+    if($(".swiper-slide").length===0){
+      SwiperBox()
+    }
     // 當button重新放入時，由於Home_count是在外部被宣告的，所以導致這裡進來的Home_count會是undefined
     if(Home_count === undefined){
       Home_count = 1;
@@ -169,75 +194,105 @@ $(document).ready(function () {
       method:"GET",
       dataType:"JSON",
       success:function(res){
-        if(res.results === undefined){
-          count = 1;
-          HomePage(Home_count);
-          return res;
-        }
-
+        return res
       }
     })
+    // 按照Json的順序放到TranslateMovie()中，防止電影位置改變
     for(const movie of getMovie.results){
       await TranslateMovie(movie)
     }
-    $(".movie_container").html(MovieContent);
-    async function TranslateMovie(movie){
+    // 顯示電影
+    await $(".movie_container").html(MovieContent);
+    $('.page').html(Home_count)
+    async function TranslateMovie(movie,count){
+      const MovieData = {
+        translate:[],
+        movie:[],
+      }
       const translate = await $.ajax({
         url:Movie_url+`/movie/${movie.id}/translations?`+key,
         method:"GET",
         dataType:"JSON",
         success:function(res){
-          return res
+          return res;
         }
       })
-      $.each(translate.translations,(index,ID)=>{
+      // 過濾有無中文名稱
+      await $.each(translate.translations,(index,ID)=>{
         if(ID.iso_639_1 === "zh" && ID.iso_3166_1 === "TW"){
-          if(movie.poster_path && ID.data.title){
-            MovieContent += `
-              <div class="d-flex flex-column mb-3 movie_content">
-                <div class="movie_poster">
-                  <img class="" src="${Poster_url + movie.poster_path}">
-                </div>
-                <div class="d-flex justify-content-center movie_info">
-                  <h4 class="fs-6 title">${ID.data.title}</h4>
-                </div>
-              </div>      
-            `;
+          // 不抓到重複的資料
+          if(!MovieData.translate.includes(ID)){
+            MovieData.translate.push(ID)
+          }
+          // 不抓到重複的資料
+          if(!MovieData.movie.includes(movie)){
+            MovieData.movie.push(movie)
+          }
+        }else if(ID.iso_3166_1 === "US" && ID.iso_639_1 === "en"){
+          // 如果上下都符合，也不抓到重複的資料
+          if(!MovieData.movie.includes(movie)){
+            MovieData.movie.push(movie)
           }
         }
       })
-    }
-    $('.page').html(Home_count)
-    HomePageControl(Home_count);
-    function HomePageControl(Home_count) {
-      if(Home_count === 1){
-        $(".up").click(async (e)=>{
-          e.stopPropagation()
-          $("html,body").animate({
-            scrollTop:0
+      // 判斷電影是否有中文名稱
+      if(MovieData.movie.length!=0 && MovieData.translate.length!=0){
+        await $.each(MovieData.movie,(index,movie)=>{
+          $.each(MovieData.translate,(index,ID)=>{
+            if(movie.title && ID.data.title){
+              MovieContent += `
+                <div class="d-flex flex-column mb-3 movie_content">
+                  <div class="movie_poster">
+                    <img class="" src="${Poster_url + movie.poster_path}">
+                  </div>
+                  <div class="d-flex justify-content-center movie_info">
+                    <h4 class="fs-6 title">${ID.data.title}</h4>
+                  </div>
+                </div>      
+              `;
+            }
           })
         })
+      // 沒有就顯示英文
       }else{
-        $(".up").click(async(e)=>{
-          e.stopPropagation()
-          await $("html,body").animate({
-            scrollTop:0
-          })
-          Home_count --
-          HomePage(Home_count)
+        await $.each(MovieData.movie,(index,movie)=>{
+          MovieContent += `
+            <div class="d-flex flex-column mb-3 movie_content">
+              <div class="movie_poster">
+                <img class="" src="${Poster_url + movie.poster_path}">
+              </div>
+              <div class="d-flex justify-content-center movie_info">
+                <h4 class="fs-6 title">${movie.title}</h4>
+              </div>
+            </div>      
+          `;
         })
       }
+
+      $(".up").off("click").click(async(e)=>{
+        await ScrollAnimation()
+        if(Home_count!=1){
+          Home_count --
+        }
+        await HomePage(Home_count)
+      })
+
       $(".down").off("click").click(async(e)=>{
-        e.stopPropagation()
-        await $("html,body").animate({
-          scrollTop:0
-        })
+        await ScrollAnimation()
         Home_count ++
-        HomePage(Home_count)
+        await HomePage(Home_count)
       })
     }
   }
-
+  
+  function ScrollAnimation(){
+    return new Promise((resolve)=>{
+      $("html,body").animate({
+        scrollTop:0,
+      },50)
+      resolve()
+    })
+  }
   // 製造Swiper中的內容
   async function SwiperBox() {
     let SwiperContainer = "";
@@ -275,7 +330,7 @@ $(document).ready(function () {
           console.log(err)
         }
       })
-      $.each(MovieTranslate.translations,(index,ID)=>{
+      await $.each(MovieTranslate.translations,(index,ID)=>{
         if(ID.iso_639_1 === "zh" && ID.iso_3166_1 === "TW"){
           SwiperContainer += `
             <div class="swiper-slide" style=background-image:url(${Poster_url + movie.backdrop_path})>
@@ -288,12 +343,11 @@ $(document).ready(function () {
             </div> 
           `;
         }
-        $(".swiper-wrapper").html(SwiperContainer);
       })
+      $(".swiper-wrapper").html(SwiperContainer);
     }
   }
   async function initSwiper(){
-    console.log('yes')
     // Swiper JS
     // 要放在抓取電影內容的API後面才能進行初始化
     const mySwiper = new Swiper(".mySwiper", {
@@ -308,4 +362,7 @@ $(document).ready(function () {
     });
   }
 });
+
+
+
 
