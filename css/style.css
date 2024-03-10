@@ -170,8 +170,9 @@ li > .dropdown-item:hover {
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
-  background-size: cover;
+  background-size: 100% 100%;
   background-position: 80% 20%;
+  background-repeat: no-repeat;
 }
 .mySwiper > .swiper-wrapper > .swiper-slide > .black {
   width: 100%;
@@ -206,7 +207,7 @@ li > .dropdown-item:hover {
   line-height: 2rem;
 }
 .mySwiper > .swiper-wrapper > .swiper-slide > .black > p {
-  width: 500px;
+  width: 650px;
   color: var(--text-purple);
 }
 
